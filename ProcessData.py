@@ -32,7 +32,7 @@ for subfolder in subfolderList:
     # `hspace` controls the height space between rows
     fig, ax = plt.subplots(4,1,figsize=(15,10))
     n = 0
-    fig.suptitle(subfolder)
+    fig.suptitle(subfolder + " Frequency Spectrum", fontsize=14, y=0.9)  # Adjust y to lower the title
 
     for filename in filenameList:
         dataPath = os.path.join(folder,subfolder,filename)
@@ -54,9 +54,9 @@ for subfolder in subfolderList:
         ax[n].plot(x,y,label=filename.removesuffix("Freq.txt"))
         ax[n].set_xticks(np.arange(0,1300,100))    
         ax[n].set_xlim(0,1300)
-        ax[n].set_ylim(0,0.015)
+        # ax[n].set_ylim(0,0.015)
 
-        title = filename.removesuffix('Freq.txt') + ' DC'
+        # title = filename.removesuffix('Freq.txt') + ' DC'
         # ax[n].set_title(title)
         # ax[n].set_ylabel("Magnitude")
         # ax[n].set_xlabel("Frequency (Hz)")
@@ -72,6 +72,6 @@ for subfolder in subfolderList:
     # Adjust layout to prevent overlap
     plt.tight_layout(rect=[0.1, 0.1, 0.9, 0.9])  # Leave space for master labels
 
-    fig.savefig(os.path.join(resultPath, title + '.svg'))
+    fig.savefig(os.path.join(resultPath, subfolder + '.png'))
 
         # newPlot.show()
