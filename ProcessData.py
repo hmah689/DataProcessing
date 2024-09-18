@@ -47,12 +47,12 @@ for subfolder in subfolderList:
 
 
         time = np.array(dataArray[2:,0],dtype= float)
-        index = np.where(time == 0.5)[0] #find index for 1 second
+        index = np.where(time == 0.2)[0] #find index for 1 second
 
         x = np.array(time[0:index[0]],dtype= float)
         y = np.array(dataArray[2:index[0]+2,1], dtype= float)
 
-        velocity_cumulative = integrate.cumulative_trapezoid(y, x,initial=2)
+        velocity_cumulative = integrate.cumulative_trapezoid(y, x,initial=0)
         displacement_cumulative = integrate.cumulative_trapezoid(velocity_cumulative,x,initial = 0)
 
         ax[n].plot(x,displacement_cumulative,label=filename.removesuffix("Freq.txt"))
