@@ -11,7 +11,7 @@ folder = 'NotShorted'
 # filenameList = ['0AFreq.txt','1AFreq.txt','5AFreq.txt','10AFreq.txt','15AFreq.txt']
 
 subfolderList = ['10AC','50AC','90AC']
-filenameList = ['0AFreq.txt','1AFreq.txt','5AFreq.txt','10AFreq.txt']
+filenameList = ['0ATime.txt','1ATime.txt','5ATime.txt','10ATime.txt']
 
 # subfolderList = ['10AC']
 # filenameList = ['0AFreq.txt','1AFreq.txt','5AFreq.txt','10AFreq.txt']
@@ -48,12 +48,17 @@ for subfolder in subfolderList:
             cols = line.split('\t')
             dataArray = np.vstack([dataArray,cols]) #vertically append
 
-        x = np.array(dataArray[2:,0],dtype= float)
-        y = np.array(dataArray[2:,1], dtype= float)
+        # index = np.where(dataArray[2:,1] == 1)[0] #find index for 1 second
+
+        time = np.array(dataArray[2:,0],dtype= float)
+        index = np.where(time == 0.5)[0] #find index for 1 second
+
+        x = np.array(time[0:index[0]],dtype= float)
+        y = np.array(dataArray[2:index[0]+2,1], dtype= float)
 
         ax[n].plot(x,y,label=filename.removesuffix("Freq.txt"))
-        ax[n].set_xticks(np.arange(0,1300,100))    
-        ax[n].set_xlim(0,1300)
+        # ax[n].set_xticks(np.arange(0,1300,100))    
+        # ax[n].set_xlim(0,1300)
         # ax[n].set_ylim(0,0.015)
 
         # title = filename.removesuffix('Freq.txt') + ' DC'
@@ -72,6 +77,6 @@ for subfolder in subfolderList:
     # Adjust layout to prevent overlap
     plt.tight_layout(rect=[0.1, 0.1, 0.9, 0.9])  # Leave space for master labels
 
-    fig.savefig(os.path.join(resultPath, subfolder + '.png'))
+    fig.savefig(os.path.join(resultPath, subfolder + ' Time' +'.png'))
 
         # newPlot.show()
