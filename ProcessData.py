@@ -1,5 +1,11 @@
-import matplotlib.pyplot as plt
 import numpy as np
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+
+# Define the exponential function
+def exponential(x, a, b):
+    return a * np.exp(b * x)
+
 
 # Initialize lists to store AC data
 data_0AC = []
@@ -159,32 +165,33 @@ for idx, (force, ac_values_list) in enumerate(data.items()):
 
     # Calculate and plot the trendline
     if x_values and y_values:  # Check if there are data points
-        # Fit a polynomial of degree 2 (quadratic) to better capture the trend
-        z = np.polyfit(x_values, y_values, 2)  # Change to 2 for a quadratic fit
-        p = np.poly1d(z)  # Create a polynomial function
+    # Fit the exponential model to the data
+        params, _ = curve_fit(exponential, x_values, y_values)
 
         # Generate x values for the trendline
         x_fit = np.linspace(min(x_values), max(x_values), 100)
-        plt.plot(x_fit, p(x_fit), linestyle='--', color=color)  # Plot the trendline with the same color
+        y_fit = exponential(x_fit, *params)
 
-        # Calculate R^2
-        y_fit = p(x_values)
-        ss_res = np.sum((y_values - y_fit) ** 2)  # Residual sum of squares
+        # Plot the trendline
+        plt.plot(x_fit, y_fit, linestyle='--', color=color)
+
+
+        # Calculate R²
+        y_pred = exponential(np.array(x_values), *params)
+        ss_res = np.sum((y_values - y_pred) ** 2)  # Residual sum of squares
         ss_tot = np.sum((y_values - np.mean(y_values)) ** 2)  # Total sum of squares
         r_squared = 1 - (ss_res / ss_tot)
 
         # Determine the position to display R^2
         offset = -1.9 # Adjust the offset based on the index
         plt.text(4.2,55.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
-
-         # Use z directly to get the coefficients for the polynomial equation
-        a, b, c = z  # a is the coefficient for x^2, b for x, and c for the constant term
-
+        
         # Create the equation string
-        equation = f'$y = {a:.2f}x^2 + {b:.2f}x + {c:.2f}$'
+        a, b = params  # a and b are the coefficients for the exponential fit
+        equation = f'$y = {a:.2f} e^{{{b:.2f} x}}$'
 
         # Display the equation on the plot
-        plt.text(6,55.5+idx*offset, equation, color=color, fontsize=10, ha='center')
+        plt.text(6, 55.5 + idx * offset, equation, color=color, fontsize=10, ha='center')
 
     # Adding labels and title
     plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
