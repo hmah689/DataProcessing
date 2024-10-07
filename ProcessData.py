@@ -42,67 +42,67 @@ dc_10a = []
 for x in range(0,5):
     if x == 0:
         for line in data_0AC:
-            dc_2a.append(line[0])
-            dc_3a.append(line[0])
-            dc_4a.append(line[0])
-            dc_5a.append(line[0])
-            dc_6a.append(line[0])
-            dc_7a.append(line[0])
-            dc_8a.append(line[0])
-            dc_9a.append(line[0])
-            dc_10a.append(line[0])
+            dc_2a.append(float(line[0]))
+            dc_3a.append(float(line[1]))
+            dc_4a.append(float(line[2]))
+            dc_5a.append(float(line[3]))
+            dc_6a.append(float(line[4]))
+            dc_7a.append(float(line[5]))
+            dc_8a.append(float(line[6]))
+            dc_9a.append(float(line[7]))
+            dc_10a.append(float(line[8]))
         data_zip_0AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 1:
         for line in data_50AC:
-            dc_2a.append(line[0])
-            dc_3a.append(line[0])
-            dc_4a.append(line[0])
-            dc_5a.append(line[0])
-            dc_6a.append(line[0])
-            dc_7a.append(line[0])
-            dc_8a.append(line[0])
-            dc_9a.append(line[0])
-            dc_10a.append(line[0])
+            dc_2a.append(float(line[0]))
+            dc_3a.append(float(line[1]))
+            dc_4a.append(float(line[2]))
+            dc_5a.append(float(line[3]))
+            dc_6a.append(float(line[4]))
+            dc_7a.append(float(line[5]))
+            dc_8a.append(float(line[6]))
+            dc_9a.append(float(line[7]))
+            dc_10a.append(float(line[8]))
         data_zip_50AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 2:
         for line in data_100AC:
-            dc_2a.append(line[0])
-            dc_3a.append(line[0])
-            dc_4a.append(line[0])
-            dc_5a.append(line[0])
-            dc_6a.append(line[0])
-            dc_7a.append(line[0])
-            dc_8a.append(line[0])
-            dc_9a.append(line[0])
-            dc_10a.append(line[0])
+            dc_2a.append(float(line[0]))
+            dc_3a.append(float(line[1]))
+            dc_4a.append(float(line[2]))
+            dc_5a.append(float(line[3]))
+            dc_6a.append(float(line[4]))
+            dc_7a.append(float(line[5]))
+            dc_8a.append(float(line[6]))
+            dc_9a.append(float(line[7]))
+            dc_10a.append(float(line[8]))
         data_zip_100AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 3:
         for line in data_150AC:
-            dc_2a.append(line[0])
-            dc_3a.append(line[0])
-            dc_4a.append(line[0])
-            dc_5a.append(line[0])
-            dc_6a.append(line[0])
-            dc_7a.append(line[0])
-            dc_8a.append(line[0])
-            dc_9a.append(line[0])
-            dc_10a.append(line[0])
+            dc_2a.append(float(line[0]))
+            dc_3a.append(float(line[1]))
+            dc_4a.append(float(line[2]))
+            dc_5a.append(float(line[3]))
+            dc_6a.append(float(line[4]))
+            dc_7a.append(float(line[5]))
+            dc_8a.append(float(line[6]))
+            dc_9a.append(float(line[7]))
+            dc_10a.append(float(line[8]))
         data_zip_150AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 4:
         for line in data_200AC:
-            dc_2a.append(line[0])
-            dc_3a.append(line[0])
-            dc_4a.append(line[0])
-            dc_5a.append(line[0])
-            dc_6a.append(line[0])
-            dc_7a.append(line[0])
-            dc_8a.append(line[0])
-            dc_9a.append(line[0])
-            dc_10a.append(line[0])
+            dc_2a.append(float(line[0]))
+            dc_3a.append(float(line[1]))
+            dc_4a.append(float(line[2]))
+            dc_5a.append(float(line[3]))
+            dc_6a.append(float(line[4]))
+            dc_7a.append(float(line[5]))
+            dc_8a.append(float(line[6]))
+            dc_9a.append(float(line[7]))
+            dc_10a.append(float(line[8]))
         data_zip_200AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     x += 1
