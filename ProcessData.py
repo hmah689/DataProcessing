@@ -104,6 +104,9 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
+        # dc_2a.remove(dc_2a[4])
+        # dc_3a.remove(dc_3a[4])
+        # dc_4a.remove(dc_4a[4])
         data_zip_200AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     x += 1
@@ -124,14 +127,23 @@ data = {
     150: data_zip_150AC,
     200: data_zip_200AC
 }
-# Create a scatter plot
-plt.figure(figsize=(10, 6))
+
+# data = {
+#     50: data_zip_50AC,
+# }
+
+
+
 
 # Define colors for each force level
 colors = ['blue', 'orange', 'green', 'red', 'purple']
 
+
 # Loop through each force value and its corresponding data
 for idx, (force, ac_values_list) in enumerate(data.items()):
+    # Create a scatter plot
+    plt.figure(figsize=(10, 6))
+
     # Prepare lists for scatter plotting
     x_values = []
     y_values = []
@@ -163,16 +175,25 @@ for idx, (force, ac_values_list) in enumerate(data.items()):
 
         # Determine the position to display R^2
         offset = -1.9 # Adjust the offset based on the index
-        plt.text(3.9,58.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
+        plt.text(4.2,55.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
 
-# Adding labels and title
-plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
-plt.xlabel('DC Values')
-plt.ylabel('AC Values')
-plt.xticks(dc_values)  # Set x-ticks to DC values
-plt.legend()
-plt.grid(True)
+         # Use z directly to get the coefficients for the polynomial equation
+        a, b, c = z  # a is the coefficient for x^2, b for x, and c for the constant term
 
-# Save the plot as a file and show it
-plt.savefig("force_vs_dc_scatter_multiple_measurements_with_colored_trendlines_and_r2.png")
-plt.show()
+        # Create the equation string
+        equation = f'$y = {a:.2f}x^2 + {b:.2f}x + {c:.2f}$'
+
+        # Display the equation on the plot
+        plt.text(6,55.5+idx*offset, equation, color=color, fontsize=10, ha='center')
+
+    # Adding labels and title
+    plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
+    plt.xlabel('DC Values')
+    plt.ylabel('AC Values')
+    plt.xticks(dc_values)  # Set x-ticks to DC values
+    plt.legend()
+    plt.grid(True)
+
+    # Save the plot as a file and show it
+    plt.savefig(f"{idx}.png")
+    plt.show()
