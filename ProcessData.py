@@ -124,9 +124,9 @@ data = {
     150: data_zip_150AC,
     200: data_zip_200AC
 }
-
 # Create a scatter plot
 plt.figure(figsize=(10, 6))
+
 # Define colors for each force level
 colors = ['blue', 'orange', 'green', 'red', 'purple']
 
@@ -155,6 +155,16 @@ for idx, (force, ac_values_list) in enumerate(data.items()):
         x_fit = np.linspace(min(x_values), max(x_values), 100)
         plt.plot(x_fit, p(x_fit), linestyle='--', color=color)  # Plot the trendline with the same color
 
+        # Calculate R^2
+        y_fit = p(x_values)
+        ss_res = np.sum((y_values - y_fit) ** 2)  # Residual sum of squares
+        ss_tot = np.sum((y_values - np.mean(y_values)) ** 2)  # Total sum of squares
+        r_squared = 1 - (ss_res / ss_tot)
+
+        # Determine the position to display R^2
+        offset = -1.9 # Adjust the offset based on the index
+        plt.text(3.9,58.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
+
 # Adding labels and title
 plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
 plt.xlabel('DC Values')
@@ -164,5 +174,5 @@ plt.legend()
 plt.grid(True)
 
 # Save the plot as a file and show it
-plt.savefig("force_vs_dc_scatter_multiple_measurements_with_colored_trendlines.png")
+plt.savefig("force_vs_dc_scatter_multiple_measurements_with_colored_trendlines_and_r2.png")
 plt.show()
