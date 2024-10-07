@@ -1,71 +1,155 @@
 import matplotlib.pyplot as plt
-import scienceplots 
-import numpy as np
-import os
 
+# Initialize lists to store AC data
+data_0AC = []
+data_50AC = []
+data_100AC = []
+data_150AC = []
+data_200AC = []
 
-filename = "Force-data.txt"
-data = []
-
-
-with open(filename, 'r') as file:
-    i = 0
+# Open the file and read its contents
+with open('AllTests.txt', 'r') as file:
     for line in file:
-        if i != 0:
-            values = line.split()
-            data.append(values)
-        #update index
-        i += 1
+        data = line.split()
+        if len(data) == 0 or data[0] == 'Force':
+            continue  # Skip empty lines or header lines
+        try:
+            force_value = float(data[0])  # Convert the first element to a float
+            if force_value == 0:
+                data_0AC.append(data[1:])  # Append the rest of the line
+            elif force_value == 50:
+                data_50AC.append(data[1:])
+            elif force_value == 100:
+                data_100AC.append(data[1:])
+            elif force_value == 150:
+                data_150AC.append(data[1:])
+            elif force_value == 200:
+                data_200AC.append(data[1:])
+        except ValueError:
+            print(f"Could not convert line to float: {line.strip()}")  # Handle potential conversion errors
 
+dc_values = [2, 3, 4, 5, 6, 7, 8, 9, 10]  # DC values for x-axis
 
-plt.figure()
-plt.title('Force vs DC')
-plt.xlabel("DC Offeset (A)")
-plt.ylabel("Break Force (N)")
+dc_2a = []
+dc_3a = []
+dc_4a = []
+dc_5a = []
+dc_6a = []
+dc_7a = []
+dc_8a = []
+dc_9a = []
+dc_10a = []
+for x in range(0,5):
+    if x == 0:
+        for line in data_0AC:
+            dc_2a.append(line[0])
+            dc_3a.append(line[0])
+            dc_4a.append(line[0])
+            dc_5a.append(line[0])
+            dc_6a.append(line[0])
+            dc_7a.append(line[0])
+            dc_8a.append(line[0])
+            dc_9a.append(line[0])
+            dc_10a.append(line[0])
+        data_zip_0AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
-# #get 0AC trend, ignore first element which is 0AC header
-# y = data[1][1:]
-y = []
-for num in data[1][1:]:
-    y.append(float(num))
+    if x == 1:
+        for line in data_50AC:
+            dc_2a.append(line[0])
+            dc_3a.append(line[0])
+            dc_4a.append(line[0])
+            dc_5a.append(line[0])
+            dc_6a.append(line[0])
+            dc_7a.append(line[0])
+            dc_8a.append(line[0])
+            dc_9a.append(line[0])
+            dc_10a.append(line[0])
+        data_zip_50AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
-# x = data[0
-x = []
-for num in data[0]:
-    x.append(float(num))
+    if x == 2:
+        for line in data_100AC:
+            dc_2a.append(line[0])
+            dc_3a.append(line[0])
+            dc_4a.append(line[0])
+            dc_5a.append(line[0])
+            dc_6a.append(line[0])
+            dc_7a.append(line[0])
+            dc_8a.append(line[0])
+            dc_9a.append(line[0])
+            dc_10a.append(line[0])
+        data_zip_100AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
-plt.grid(True)
-# Enable minor gridlines
-plt.minorticks_on()  # Turn on the minor ticks
-plt.grid(which='minor', color='gray', linestyle=':', linewidth=0.5)  # Customize minor gridlines
+    if x == 3:
+        for line in data_150AC:
+            dc_2a.append(line[0])
+            dc_3a.append(line[0])
+            dc_4a.append(line[0])
+            dc_5a.append(line[0])
+            dc_6a.append(line[0])
+            dc_7a.append(line[0])
+            dc_8a.append(line[0])
+            dc_9a.append(line[0])
+            dc_10a.append(line[0])
+        data_zip_150AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
-plt.plot(x,y)
-plt.savefig("Force-data.png")
+    if x == 4:
+        for line in data_200AC:
+            dc_2a.append(line[0])
+            dc_3a.append(line[0])
+            dc_4a.append(line[0])
+            dc_5a.append(line[0])
+            dc_6a.append(line[0])
+            dc_7a.append(line[0])
+            dc_8a.append(line[0])
+            dc_9a.append(line[0])
+            dc_10a.append(line[0])
+        data_zip_200AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
+    x += 1
+    dc_2a = []
+    dc_3a = []
+    dc_4a = []
+    dc_5a = []
+    dc_6a = []
+    dc_7a = []
+    dc_8a = []
+    dc_9a = []
+    dc_10a = []
 
+data = {
+    0: data_zip_0AC,
+    50: data_zip_50AC,
+    100: data_zip_100AC,
+    150: data_zip_150AC,
+    200: data_zip_200AC
+}
 
-#####---------------------------------------------------------------------------
-# do again for AC
-plt.figure()
-plt.title('Force vs DC Bias')
-plt.xlabel("DC Offeset (A)")
-plt.ylabel("Break Force (N)")
+# Create a scatter plot
+plt.figure(figsize=(10, 6))
 
-x = []
-for num in data[0]:
-    x.append(float(num))
+# Loop through each force value and its corresponding data
+for force, ac_values_list in data.items():
+    # Prepare lists for scatter plotting
+    x_values = []
+    y_values = []
+    
+    for dc_value, ac_values in zip(dc_values, ac_values_list):
+        for ac_value in ac_values:  # Loop through multiple AC measurements
+            x_values.append(dc_value)
+            y_values.append(ac_value)
+    
+    # Scatter plot for the current force
+    plt.scatter(x_values, y_values, label=f'Force = {force} N', alpha=0.7)
 
-y = []
-for i in range(2,6):
-    for num in data[i][1:]:
-        y.append(float(num))
-
-    plt.plot(x,y,label = data[i][0] + "A AC")
-    y = []
-plt.grid(True)
-# Enable minor gridlines
-plt.minorticks_on()  # Turn on the minor ticks
-plt.grid(which='minor', color='gray', linestyle=':', linewidth=0.5)  # Customize minor gridlines
-
+# Adding labels and title
+plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
+plt.xlabel('DC Values')
+plt.ylabel('AC Values')
+plt.xticks(dc_values)  # Set x-ticks to DC values
 plt.legend()
-plt.savefig("Force-data-ac.png")
+plt.grid(True)
+
+# Show the plot
+plt.savefig("force_vs_dc_scatter_multiple_measurements.png")  # Save the plot as a file
+plt.show()
+
