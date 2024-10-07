@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Initialize lists to store AC data
 data_0AC = []
@@ -126,9 +127,11 @@ data = {
 
 # Create a scatter plot
 plt.figure(figsize=(10, 6))
+# Define colors for each force level
+colors = ['blue', 'orange', 'green', 'red', 'purple']
 
 # Loop through each force value and its corresponding data
-for force, ac_values_list in data.items():
+for idx, (force, ac_values_list) in enumerate(data.items()):
     # Prepare lists for scatter plotting
     x_values = []
     y_values = []
@@ -136,10 +139,21 @@ for force, ac_values_list in data.items():
     for dc_value, ac_values in zip(dc_values, ac_values_list):
         for ac_value in ac_values:  # Loop through multiple AC measurements
             x_values.append(dc_value)
-            y_values.append(ac_value)
+            y_values.append(float(ac_value))  # Ensure AC values are floats
     
     # Scatter plot for the current force
-    plt.scatter(x_values, y_values, label=f'Force = {force} N', alpha=0.7)
+    color = colors[idx]  # Select color based on index
+    plt.scatter(x_values, y_values, label=f'Force = {force} N', alpha=0.7, color=color)
+
+    # Calculate and plot the trendline
+    if x_values and y_values:  # Check if there are data points
+        # Fit a polynomial of degree 2 (quadratic) to better capture the trend
+        z = np.polyfit(x_values, y_values, 2)  # Change to 2 for a quadratic fit
+        p = np.poly1d(z)  # Create a polynomial function
+
+        # Generate x values for the trendline
+        x_fit = np.linspace(min(x_values), max(x_values), 100)
+        plt.plot(x_fit, p(x_fit), linestyle='--', color=color)  # Plot the trendline with the same color
 
 # Adding labels and title
 plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
@@ -149,7 +163,6 @@ plt.xticks(dc_values)  # Set x-ticks to DC values
 plt.legend()
 plt.grid(True)
 
-# Show the plot
-plt.savefig("force_vs_dc_scatter_multiple_measurements.png")  # Save the plot as a file
+# Save the plot as a file and show it
+plt.savefig("force_vs_dc_scatter_multiple_measurements_with_colored_trendlines.png")
 plt.show()
-
