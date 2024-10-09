@@ -1,5 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.optimize import curve_fit
+
+# Define the exponential function
+def exp_func(x, a, b):
+    return a * np.exp(b * x)
 
 # Initialize lists to store AC data
 data_0AC = []
@@ -52,7 +57,7 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
-        data_zip_0AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
+        # data_zip_0AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 1:
         for line in data_50AC:
@@ -65,7 +70,7 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
-        data_zip_50AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
+        # data_zip_50AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 2:
         for line in data_100AC:
@@ -78,7 +83,7 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
-        data_zip_100AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
+        # data_zip_100AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 3:
         for line in data_150AC:
@@ -91,7 +96,7 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
-        data_zip_150AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
+        # data_zip_150AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     if x == 4:
         for line in data_200AC:
@@ -104,25 +109,21 @@ for x in range(0,5):
             dc_8a.append(float(line[6]))
             dc_9a.append(float(line[7]))
             dc_10a.append(float(line[8]))
-        data_zip_200AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
+        # data_zip_200AC = [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a]
 
     x += 1
-    dc_2a = []
-    dc_3a = []
-    dc_4a = []
-    dc_5a = []
-    dc_6a = []
-    dc_7a = []
-    dc_8a = []
-    dc_9a = []
-    dc_10a = []
+    # dc_2a = []
+    # dc_3a = []
+    # dc_4a = []
+    # dc_5a = []
+    # dc_6a = []
+    # dc_7a = []
+    # dc_8a = []
+    # dc_9a = []
+    # dc_10a = []
 
 data = {
-    0: data_zip_0AC,
-    50: data_zip_50AC,
-    100: data_zip_100AC,
-    150: data_zip_150AC,
-    200: data_zip_200AC
+    0: [dc_2a,dc_3a,dc_4a,dc_5a,dc_6a,dc_7a,dc_8a,dc_9a,dc_10a],
 }
 # Create a scatter plot
 plt.figure(figsize=(10, 6))
@@ -145,25 +146,30 @@ for idx, (force, ac_values_list) in enumerate(data.items()):
     color = colors[idx]  # Select color based on index
     plt.scatter(x_values, y_values, label=f'Force = {force} N', alpha=0.7, color=color)
 
-    # Calculate and plot the trendline
-    if x_values and y_values:  # Check if there are data points
-        # Fit a polynomial of degree 2 (quadratic) to better capture the trend
-        z = np.polyfit(x_values, y_values, 2)  # Change to 2 for a quadratic fit
-        p = np.poly1d(z)  # Create a polynomial function
+    # Fit the model
+    params, covariance = curve_fit(exp_func, x_values, y_values)
+    a, b = params  # Extract the parameters
 
-        # Generate x values for the trendline
-        x_fit = np.linspace(min(x_values), max(x_values), 100)
-        plt.plot(x_fit, p(x_fit), linestyle='--', color=color)  # Plot the trendline with the same color
+    # Create the equation string for display
+    equation = f'y = {a:.2f}e^({b:.2f}x)'
 
-        # Calculate R^2
-        y_fit = p(x_values)
-        ss_res = np.sum((y_values - y_fit) ** 2)  # Residual sum of squares
-        ss_tot = np.sum((y_values - np.mean(y_values)) ** 2)  # Total sum of squares
-        r_squared = 1 - (ss_res / ss_tot)
+    # Generate x values for the trendline
+    x_fit = np.linspace(min(x_values), max(x_values), 100)
+    y_fit = exp_func(x_fit, a, b)  # Calculate the exponential values
 
-        # Determine the position to display R^2
-        offset = -1.9 # Adjust the offset based on the index
-        plt.text(3.9,58.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
+    # Plot the trendline with the same color
+    plt.plot(x_fit, y_fit, linestyle='--', color=color, label=f'Exponential Fit for {force} N')
+
+
+    # Calculate R^2
+    residuals = y_values - exp_func(np.array(x_values), a, b)
+    ss_res = np.sum(residuals**2)  # Residual sum of squares
+    ss_tot = np.sum((y_values - np.mean(y_values))**2)  # Total sum of squares
+    r_squared = 1 - (ss_res / ss_tot)
+
+    # Display the equation and R^2 on the plot
+    plt.text(0.3, 0.9 - idx * 0.1, f'{equation}\n$R^2 = {r_squared:.2f}$', 
+             color=color, fontsize=10, transform=plt.gca().transAxes)
 
 # Adding labels and title
 plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
