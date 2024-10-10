@@ -1,82 +1,56 @@
 import matplotlib.pyplot as plt
-import scienceplots 
+import scienceplots
 import numpy as np
 import os
 
 folder = 'NotShorted'
-# subfolder = '100AC'
-# filename = '1AFreq.txt'
+subfolderList = ['10AC', '50AC', '90AC']
+filenameList = ['0ATime.txt']
+resultPath = 'TimeSeries'
 
-# subfolderList = ['10AC','20AC','30AC','40AC','50AC','60AC','70AC','80AC','90AC','100AC']
-# filenameList = ['0AFreq.txt','1AFreq.txt','5AFreq.txt','10AFreq.txt','15AFreq.txt']
+plt.style.use('science')
+plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, wspace=0.4, hspace=2)
+fig, ax = plt.subplots(3, 1, figsize=(15, 10))
 
-subfolderList = ['10AC','50AC','90AC']
-filenameList = ['0ATime.txt','1ATime.txt','5ATime.txt','10ATime.txt']
+fig.suptitle("Frequency Spectrum", fontsize=14, y=0.9)
 
-# subfolderList = ['10AC']
-# filenameList = ['0AFreq.txt','1AFreq.txt','5AFreq.txt','10AFreq.txt']
+# Initialize a list to hold y data for setting limits later
+y_values = []
 
+for n, subfolder in enumerate(subfolderList):
+    dataPath = os.path.join(folder, subfolder, filenameList[0])
+    
+    with open(dataPath, 'r') as file:
+        data = file.readlines()
 
-for subfolder in subfolderList:
-    resultPath = subfolder + " Freq Plots"
-    try:
-        os.mkdir(resultPath)
-    except:
-        print('Directory Exists')
+    # Read and parse the data
+    dataArray = np.array([line.strip().split('\t') for line in data[2:]], dtype=float)
+    
+    # Assuming time is in the first column
+    time = dataArray[:, 0]
+    index = np.where(time == 0.5)[0]
 
+    if index.size == 0:
+        print(f"No 0.5s timestamp found in {dataPath}. Skipping...")
+        continue
 
-    plt.style.use('science')
-    # Adjust the spacing between subplots
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, wspace=0.4, hspace=2)
-    # `wspace` controls the width space between columns
-    # `hspace` controls the height space between rows
-    fig, ax = plt.subplots(4,1,figsize=(15,10))
-    n = 0
-    fig.suptitle(subfolder + " Frequency Spectrum", fontsize=14, y=0.9)  # Adjust y to lower the title
+    x = time[:index[0]]
+    y = dataArray[:index[0], 1]
+    y_values.append(y)  # Store y values for later use
 
-    for filename in filenameList:
-        dataPath = os.path.join(folder,subfolder,filename)
-        with open(dataPath,'r') as file:
-            data = file.readlines()
+    ax[n].plot(x, y)  # Plot without legend
+    ax[n].set_title(subfolder)  # Keep titles for each subplot
 
-        line = data[0].replace('\n','')
-        cols = line.split('\t')
-        dataArray = np.array(cols)
+# Set the same y-limits for all plots based on the min and max of all y values
+y_min = min(y.min() for y in y_values)
+y_max = max(y.max() for y in y_values)
 
-        for i in range(1,len(data)):
-            line = data[i].replace('\n','') #remove the newline char
-            cols = line.split('\t')
-            dataArray = np.vstack([dataArray,cols]) #vertically append
+for a in ax:
+    a.set_ylim(y_min, y_max)  # Apply uniform y-axis limits
 
-        # index = np.where(dataArray[2:,1] == 1)[0] #find index for 1 second
+# Master labels
+fig.text(0.5, 0.09, 'Frequency (Hz)', ha='center', fontsize=14)
+fig.text(0.08, 0.5, 'Magnitude', va='center', rotation='vertical', fontsize=14)
 
-        time = np.array(dataArray[2:,0],dtype= float)
-        index = np.where(time == 0.5)[0] #find index for 1 second
-
-        x = np.array(time[0:index[0]],dtype= float)
-        y = np.array(dataArray[2:index[0]+2,1], dtype= float)
-
-        ax[n].plot(x,y,label=filename.removesuffix("Freq.txt"))
-        # ax[n].set_xticks(np.arange(0,1300,100))    
-        # ax[n].set_xlim(0,1300)
-        # ax[n].set_ylim(0,0.015)
-
-        # title = filename.removesuffix('Freq.txt') + ' DC'
-        # ax[n].set_title(title)
-        # ax[n].set_ylabel("Magnitude")
-        # ax[n].set_xlabel("Frequency (Hz)")
-        # Add master x and y axis labels
-
-        ax[n].legend()
-        n += 1
-
-
-    fig.text(0.5, 0.09, 'Frequency (Hz)', ha='center', fontsize=14)
-    fig.text(0.08, 0.5, 'Magnitude', va='center', rotation='vertical', fontsize=14)
-
-    # Adjust layout to prevent overlap
-    plt.tight_layout(rect=[0.1, 0.1, 0.9, 0.9])  # Leave space for master labels
-
-    fig.savefig(os.path.join(resultPath, subfolder + ' Time' +'.png'))
-
-        # newPlot.show()
+plt.tight_layout(rect=[0.1, 0.1, 0.9, 0.9])
+fig.savefig('Vibrations-in-Time.png')
