@@ -12,7 +12,7 @@ plt.style.use('science')
 plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1, wspace=0.4, hspace=2)
 fig, ax = plt.subplots(3, 1, figsize=(15, 10))
 
-fig.suptitle("Frequency Spectrum", fontsize=14, y=0.9)
+fig.suptitle("Acceleration Signals with Varying AC", fontsize=14, y=0.9)
 
 # Initialize a list to hold y data for setting limits later
 y_values = []
