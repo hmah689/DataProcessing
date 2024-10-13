@@ -183,15 +183,14 @@ for idx, (force, ac_values_list) in enumerate(data.items()):
         r_squared = 1 - (ss_res / ss_tot)
 
         # Determine the position to display R^2
-        offset = -1.9 # Adjust the offset based on the index
-        plt.text(4.2,55.5+idx*offset,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
+        plt.text(4.2,58.5,f'$R^2 = {r_squared:.2f}$', color=color, fontsize=10, ha='center')
         
         # Create the equation string
         a, b = params  # a and b are the coefficients for the exponential fit
         equation = f'$y = {a:.2f} e^{{{b:.2f} x}}$'
 
         # Display the equation on the plot
-        plt.text(6, 55.5 + idx * offset, equation, color=color, fontsize=10, ha='center')
+        plt.text(6,58.5, equation, color=color, fontsize=10, ha='center')
 
     # Adding labels and title
     plt.title('Scatter Plot of Force vs. DC Values with Multiple Measurements')
