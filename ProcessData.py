@@ -50,7 +50,7 @@ for a in ax:
 
 # Master labels
 fig.text(0.5, 0.09, 'Frequency (Hz)', ha='center', fontsize=14)
-fig.text(0.08, 0.5, 'Magnitude', va='center', rotation='vertical', fontsize=14)
+fig.text(0.08, 0.5, 'Accleration (m/s^2)', va='center', rotation='vertical', fontsize=14)
 
 plt.tight_layout(rect=[0.1, 0.1, 0.9, 0.9])
 fig.savefig('Vibrations-in-Time.png')
